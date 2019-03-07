@@ -1,0 +1,39 @@
+<ng-template  let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">User Login</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+        <label for="dateOfBirth">Username</label>
+        <div class="input-group">
+          <input id="username" class="form-control" placeholder="username" name="username">
+          <!-- <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+          </div> -->
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="dateOfBirth">Username</label>
+        <div class="input-group">
+          <input id="password" class="form-control" placeholder="password" name="password">
+          <!-- <div class="input-group-append">
+            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+          </div> -->
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Login</button>
+  </div>
+</ng-template>
+
+<button class="btn btn-lg btn-outline-primary" (click)="open()">Launch demo modal</button>
+
+<hr>
+
+<pre>{{closeResult}}</pre>

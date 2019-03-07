@@ -1,0 +1,80 @@
+<!-- <ng-container>
+  <div class="ng-chat-title secondary-background">
+    <strong>Anushka</strong>
+  </div>
+  <div #chatMessages class="ng-chat-messages primary-background">
+    <div *ngFor="let chat of chats; let i = index"> <span [innerHtml]="chat.message" [ngClass]="{'sent-chat-message-container': chat.type == 'input', 'received-chat-message-container': chat.type == 'output'}"></span>
+
+    </div>
+  </div>
+  <div class="ng-chat-footer primary-outline-color primary-background">
+    <form (ngSubmit)="onSubmit()">
+      <input [(ngModel)]="req" type="text" name="userMessage" class="chat-window-input" />
+    </form>
+  </div>
+</ng-container> -->
+
+<div class="container" style="background-color:rgb(255, 255, 255)">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-comment"></span>
+          <!--<div class="btn-group pull-right">
+            <button type="button" class="btn btn-default btn-xs" (click)="logout()">
+              Logout
+            </button>
+          </div> -->
+        </div>
+        <div #scrollMe class="panel-body" [scrollTop]="scrollMe.scrollHeight">
+          <ul class="chat">
+            <li *ngFor="let chat of chats">
+              <div *ngIf="chat.type==='USER'; else rightchat">
+                <div class="chat-body clearfix" style="text-align: right;">
+                  <div class="header">
+                    <strong class="primary-font">{{ user }} :</strong>
+                    <small class="pull-right text-muted">&nbsp;&nbsp;&nbsp;
+                      <span class="glyphicon glyphicon-time" style="font-size: smaller">
+                        {{ chat.date | date:
+                        'medium'}}
+                      </span>
+                    </small>
+                  </div>
+                  <p style=" margin-right: 5px;">{{chat.message}}</p>
+                </div>
+              </div>
+              <ng-template #rightchat>
+                <div class="right clearfix" style="background-color:rgb(210, 223, 223)">
+                  <div class="chat-body clearfix" style="margin-left: 5px;">
+                    <div class="header">
+                      <small class="pull-right primary-font"><b>{{ robot }} :</b></small>
+                      <small class=" text-muted">&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-time" style="font-size: smaller">{{
+                          chat.date | date:
+                          'medium' }}</span></small>
+                    </div>
+                    <p style="margin-left: 1px;">{{chat.message}}</p>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+        </div>
+        <div class="panel-footer">
+          <form (ngSubmit)="onSubmit()" #msgForm="ngForm"><br>
+            <div class="input-group">
+              <!-- Is Disabled: {{isDisabled}} -->
+              <input id="btn-input" #messageBox type="text" [(ngModel)]="req" name="userMessage" class="form-control input-lg"
+                placeholder="Write a reply..." required="" style="width: 100%;" [disabled]="isDisabled" />
+              <!-- <span class="input-group-btn" style="margin-left: 20px">
+                <button class="btn btn-warning btn-sm" id="btn-chat" [disabled]="!msgForm.form.valid">
+                  Send</button>
+              </span> -->
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <app-products></app-products>
+</div>
+<app-login></app-login>
