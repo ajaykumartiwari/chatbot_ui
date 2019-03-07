@@ -13,7 +13,7 @@
     </form>
   </div>
 </ng-container> -->
-
+<!-- <app-login></app-login> -->
 <div class="container" style="background-color:rgb(255, 255, 255)">
   <div class="row">
     <div class="col-md-12">
@@ -77,4 +77,36 @@
   </div>
   <app-products></app-products>
 </div>
-<app-login></app-login>
+<!-- <app-login></app-login> -->
+
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">User Login</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #personForm="ngForm"(ngSubmit)="onSubmit(personForm.value)">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-group">
+          <input id="username" class="form-control" placeholder="username" name="username" [(ngModel)]="username">
+          
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Username</label>
+        <div class="input-group">
+          <input id="password" class="form-control" placeholder="password" name="password" [(ngModel)]="password">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Login</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<!-- 
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->

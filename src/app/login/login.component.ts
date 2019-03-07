@@ -14,9 +14,9 @@ export class LoginComponent implements OnInit {
 
   constructor(private modalService: NgbModal,private chatService: ChatService) {}
 
-  open() {
+  open(content) {
     console.log("----",);
-    this.modalService.open( {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -42,6 +42,7 @@ export class LoginComponent implements OnInit {
       if(data) {
         this.req = data;
         alert("request data")
+        this.getDismissReason
       }
     })
   }

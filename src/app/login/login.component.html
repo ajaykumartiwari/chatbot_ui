@@ -1,4 +1,4 @@
-<ng-template  let-modal>
+<ng-template #content let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">User Login</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -20,9 +20,6 @@
         <label for="dateOfBirth">Username</label>
         <div class="input-group">
           <input id="password" class="form-control" placeholder="password" name="password">
-          <!-- <div class="input-group-append">
-            <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-          </div> -->
         </div>
       </div>
     </form>
@@ -32,7 +29,7 @@
   </div>
 </ng-template>
 
-<button class="btn btn-lg btn-outline-primary" (click)="open()">Launch demo modal</button>
+<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
 
 <hr>
 
