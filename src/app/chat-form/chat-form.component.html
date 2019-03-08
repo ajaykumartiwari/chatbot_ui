@@ -48,7 +48,8 @@
                   <div class="chat-body clearfix" style="margin-left: 5px;">
                     <div class="header">
                       <small class="pull-right primary-font"><b>{{ robot }} :</b></small>
-                      <small class=" text-muted">&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-time" style="font-size: smaller">{{
+                      <small class=" text-muted">&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-time"
+                          style="font-size: smaller">{{
                           chat.date | date:
                           'medium' }}</span></small>
                     </div>
@@ -63,8 +64,9 @@
           <form (ngSubmit)="onSubmit()" #msgForm="ngForm"><br>
             <div class="input-group">
               <!-- Is Disabled: {{isDisabled}} -->
-              <input id="btn-input" #messageBox type="text" [(ngModel)]="req" name="userMessage" class="form-control input-lg"
-                placeholder="Write a reply..." required="" style="width: 100%;" [disabled]="isDisabled" />
+              <input id="btn-input" #messageBox type="text" [(ngModel)]="req" name="userMessage"
+                class="form-control input-lg" placeholder="Write a reply..." required="" style="width: 100%;"
+                [disabled]="isDisabled" />
               <!-- <span class="input-group-btn" style="margin-left: 20px">
                 <button class="btn btn-warning btn-sm" id="btn-chat" [disabled]="!msgForm.form.valid">
                   Send</button>
@@ -88,25 +90,27 @@
     </button>
   </div>
   <div class="modal-body">
-    <form #personForm="ngForm"(ngSubmit)="onSubmit(personForm.value)">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <div class="input-group">
-          <input id="username" class="form-control" placeholder="username" name="username" [(ngModel)]="username">
-          
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <div class="input-group">
+          <input type="username" class="form-control" placeholder="Enter Username" formControlName="username"
+             id="usernameId">
         </div>
       </div>
-      <div class="form-group">
-        <label for="password">Username</label>
-        <div class="input-group">
-          <input id="password" class="form-control" placeholder="password" name="password" [(ngModel)]="password">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" placeholder="Enter Password" formControlName="password"
+             id="passwordId">
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Login</button>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" >Login</button>
       </div>
     </form>
   </div>
 </ng-template>
 <!-- 
 <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+

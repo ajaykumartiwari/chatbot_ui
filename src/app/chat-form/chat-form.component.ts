@@ -1,9 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input} from "@angular/core";
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { ChatService } from "../chat.service";
 import { LoginComponent } from "../login/login.component";
-import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbPopover } from "@ng-bootstrap/ng-bootstrap";
 import { Content } from "@angular/compiler/src/render3/r3_ast";
+import { FormBuilder } from "@angular/forms";
+import { LoginServiceService } from "../services/login-service.service";
 
 
 @Component({
@@ -13,8 +15,13 @@ import { Content } from "@angular/compiler/src/render3/r3_ast";
 })
 export class ChatFormComponent implements OnInit {
 
-  @ViewChild('messageBox')  msgBox: ElementRef;
-  @ViewChild('content')  modelContent: ElementRef;
+  @ViewChild('messageBox') msgBox: ElementRef;
+  @ViewChild('content') modelContent: ElementRef;
+  @ViewChild('div') public popover: NgbPopover;
+
+ // @Output() closeModalEvent = new EventEmitter<boolean>();
+ @ViewChild('completeModal') completeModal: ElementRef;
+
   @Input() chatButton: boolean = false;
   req: string;
   response: string = "";
@@ -30,54 +37,60 @@ export class ChatFormComponent implements OnInit {
   model: any = {};
   loading = false;
   returnUrl: string;
+  errorMsg = ''
 
-  
+
   //req: string;
-  
+
   constructor(
     private router: Router,
     private chatService: ChatService,
     private loginComponent: LoginComponent,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private formBuilder: FormBuilder,
+    private loginServiceService: LoginServiceService,
   ) {
-    this.pushToChat({message: "How may I help you...", type: "ROBO", date: new Date()})
-   }
+    this.pushToChat({ message: "How may I help you...", type: "ROBO", date: new Date() })
+  }
 
+  loginForm = this.formBuilder.group({
+    username: [],
+    password: ['']
+
+  });
   ngOnInit() {
     this.setFocus();
   }
 
   onSubmit(): void {
-    if(this.req !="") {
+    if (this.req != "") {
       this.userRequest();
     }
   }
 
-  userRequest(): void{
+  userRequest(): void {
     console.log("User Input :" + this.req);
     this.isDisabled = true;
     this.pushToChat(this.generateChat(this.req, 'USER'));
-   
+
     this.chatService
-    .sendData(this.req)
-    .subscribe(data => {
-      console.info(data);
-      if(data) {
-        if(data.message == "login"){
-        alert("request data");
-        this.check = true;
-        this.open(this.modelContent);
-        //this.loginComponent.open();
+      .sendData(this.req)
+      .subscribe(data => {
+        console.info(data);
+        if (data) {
+          if (data.message == "login") {
+            this.open(this.modelContent);
+            //this.loginComponent.open();
+          }
+          this.req = "";
+          console.log("System output :");
+          console.log(data);
+          console.info(this.chats);
+          this.pushToChat(this.generateChat(data.message, 'ROBO'));
+          this.isDisabled = false;
+          this.setFocus();
         }
-        this.req = "";
-        console.log("System output :");
-        console.log(data);
-        console.info(this.chats);
-        this.pushToChat(this.generateChat(data.message, 'ROBO'));
-        this.isDisabled = false;
-        this.setFocus();
-      }
-    })
+      })
   }
 
   setFocus(): void {
@@ -91,12 +104,13 @@ export class ChatFormComponent implements OnInit {
   }
 
   generateChat(message: string, type: string): Chats {
-    return {message: message, type: type, date: new Date()}
+    return { message: message, type: type, date: new Date() }
   }
 
   open(content) {
-    console.log("----",);
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.check = true;
+    console.log("----");
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -114,21 +128,24 @@ export class ChatFormComponent implements OnInit {
     return null
   }
 
+  login() {
+    console.log(this.loginForm.value)
+    this.loginServiceService.login(this.loginForm.value).subscribe(
+      (response) => {
+        console.log("success", response);
+        // this.router.navigate(['/admindashboard']);
+        
+      },
+      (error) => {
+        this.errorMsg = error.statusText
+      }
+    )
+  }
 
-//   login() {
-//     this.loading = true;
-//     this.authenticationService.login(this.model.id, this.model.name)
-//         .subscribe(
-//             data => {
-//                 this.router.navigate([this.returnUrl]);
-//             },
-//             error => {
-//                 this.alertService.error(error);
-//                 this.loading = false;
-//             });
-// }
-
-
+  onClick() {
+    this.check = false
+    this.popover.close();
+  }
 }
 
 interface Chats {
@@ -139,7 +156,7 @@ interface Chats {
 
 
 export interface Person {
-  id:number;
+  id: number;
   firstName: string;
   lastName: string;
 }
