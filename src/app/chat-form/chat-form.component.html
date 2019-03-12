@@ -1,19 +1,3 @@
-<!-- <ng-container>
-  <div class="ng-chat-title secondary-background">
-    <strong>Anushka</strong>
-  </div>
-  <div #chatMessages class="ng-chat-messages primary-background">
-    <div *ngFor="let chat of chats; let i = index"> <span [innerHtml]="chat.message" [ngClass]="{'sent-chat-message-container': chat.type == 'input', 'received-chat-message-container': chat.type == 'output'}"></span>
-
-    </div>
-  </div>
-  <div class="ng-chat-footer primary-outline-color primary-background">
-    <form (ngSubmit)="onSubmit()">
-      <input [(ngModel)]="req" type="text" name="userMessage" class="chat-window-input" />
-    </form>
-  </div>
-</ng-container> -->
-<!-- <app-login></app-login> -->
 <div class="container" style="background-color:rgb(255, 255, 255)">
   <div class="row">
     <div class="col-md-12">
@@ -81,36 +65,150 @@
 </div>
 <!-- <app-login></app-login> -->
 
+<!-- Login modal begin -->
 
-<ng-template #content let-modal>
+<ng-template #content let-modal *ngIf="count == 0">
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">User Login</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <form #myForm="ngForm" [formGroup]="loginForm"  >
       <div class="form-group">
         <label for="username">Username</label>
         <div class="input-group">
           <input type="username" class="form-control" placeholder="Enter Username" formControlName="username"
-             id="usernameId">
+             id="usernameId" required>
         </div>
+        <p *ngIf="loginForm.controls.username.errors?.required  && loginForm.controls.username.touched">Username
+          required</p>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
         <div class="input-group">
           <input type="password" class="form-control" placeholder="Enter Password" formControlName="password"
-             id="passwordId">
+             id="passwordId" required>
         </div>
+        <p *ngIf="loginForm.controls.password.errors?.required  && loginForm.controls.password.touched">Password
+          required</p>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-dark" >Login</button>
+        <button type="submit" (click)="login(); modal.close('Save click')"  class="btn btn-success"
+          [disabled]="!loginForm.valid">Login</button>
       </div>
     </form>
   </div>
 </ng-template>
-<!-- 
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+<!-- Login Modal End -->
 
+<!-- Data View Modal Begin -->
+<ng-template #data let-modal >
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">User Account Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="userData!=null" style="background-color: rgb(212, 232, 248)">
+    <div>
+      <label>Account Number : {{userData.result.id}}</label>
+    </div>
+    <div>
+      <label>Account Holder Name : {{userData.result.name}}</label>
+    </div>
+    <div>
+      <label>Account Balance : {{userData.result.balance}}</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="modal.close('Save click')"  class="btn btn-danger">Close</button>
+  </div>
+</ng-template>
+<!-- Data View Modal End -->
+
+<!-- Update Account and Address Details -->
+<ng-template #update let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Update User</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #myUpdateForm="ngForm" [formGroup]="updateAddressData">
+      <div class="form-group">
+        <label for="userId">Account Number</label>
+        <div class="input-group">
+          <input type="number" class="form-control" formControlName="userId"  id="userId" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.userId.errors?.required  && updateAddressData.controls.userId.touched">Account Number
+                Required</p>
+      </div>
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="name"  id="name" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.name.errors?.required  && updateAddressData.controls.name.touched">Name
+            Required</p>
+      </div>
+      <div class="form-group">
+        <label for="addressLine1">Address Line 1</label>
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="addressLine1"  id="addressLine1" required>
+        </div>
+        <p class="help-block">Street address, P.O. box, company name, c/o</p>
+        <p *ngIf="updateAddressData.controls.addressLine1.errors?.required  && updateAddressData.controls.addressLine1.touched">Address Line 1
+            Required</p>
+      </div>
+      <div class="form-group">
+        <label for="addressLine2">Address Line 2</label>
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="addressLine2"  id="addressLine2" required>
+        </div>
+        <p class="help-block">Apartment, suite , unit, building, floor, etc.</p>
+        <p *ngIf="updateAddressData.controls.addressLine2.errors?.required  && updateAddressData.controls.addressLine2.touched">Address Line 2
+            Required</p>
+      </div>
+      <div class="form-group">
+        <label for="city">City / Town</label>
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="city"  id="city" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.city.errors?.required  && updateAddressData.controls.city.touched">City
+            Required</p>
+      </div>
+      <div class="form-group">
+        <label for="state">State</label>
+        <div class="input-group">
+          <input type="text" class="form-control" formControlName="state"  id="state" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.state.errors?.required  && updateAddressData.controls.state.touched">State
+            Required</p>
+        <div class="form-group">
+          <label for="zipcode">Country</label>
+          <div class="input-group">
+            <input type="text" class="form-control" formControlName="country"  id="country" required>
+          </div>
+          <p *ngIf="updateAddressData.controls.country.errors?.required  && updateAddressData.controls.country.touched">Country
+              Required</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="zipcode">Zipcode</label>
+        <div class="input-group">
+          <input type="number" class="form-control" formControlName="zipcode"  id="zipcode" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.zipcode.errors?.required  && updateAddressData.controls.zipcode.touched">Zipcode
+            Required</p>
+      </div>
+      <!-- [disabled]="!updateAddressData.valid" -->
+      <div class="modal-footer">
+        <button type="submit" (click)="updateUserAddress(); modal.close('Save click')"  class="btn btn-success"
+        [disabled]="!updateAddressData.valid">Update</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

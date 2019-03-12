@@ -12,16 +12,15 @@ import { ProductsComponent } from './products/products.component';
 import { MatCardModule } from '@angular/material';
 import { SwiperModule } from 'ngx-useful-swiper';
 import { LoginComponent } from './login/login.component';
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { LoginServiceService } from './services/login-service.service';
-import { UserdataComponent } from './services/userdata/userdata.component';
+import { UpdateService } from './services/update.service';
 @NgModule({
   declarations: [
     AppComponent,
     ChatFormComponent,
     ProductsComponent,
     LoginComponent,
-    UserdataComponent,
   ],
   imports: [
     BrowserModule,
@@ -35,9 +34,10 @@ import { UserdataComponent } from './services/userdata/userdata.component';
     MatCardModule,
     SwiperModule,
     NgbModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    
   ],
-  providers: [ChatService, LoginComponent,LoginServiceService],
+  providers: [ChatService, LoginComponent,LoginServiceService,NgbActiveModal,UpdateService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

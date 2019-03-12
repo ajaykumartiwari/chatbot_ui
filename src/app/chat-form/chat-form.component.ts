@@ -1,11 +1,13 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, Input } from "@angular/core";
-import { Router } from "@angular/router";
+import { Router, ActivatedRoute } from "@angular/router";
 import { ChatService } from "../chat.service";
 import { LoginComponent } from "../login/login.component";
-import { NgbModal, NgbPopover } from "@ng-bootstrap/ng-bootstrap";
+import { NgbModal, NgbPopover, NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Content } from "@angular/compiler/src/render3/r3_ast";
-import { FormBuilder } from "@angular/forms";
+import { FormBuilder, Validators } from "@angular/forms";
 import { LoginServiceService } from "../services/login-service.service";
+import { UpdateService } from "../services/update.service";
+import { UpdateModel } from "../model/update.model";
 
 
 @Component({
@@ -17,10 +19,13 @@ export class ChatFormComponent implements OnInit {
 
   @ViewChild('messageBox') msgBox: ElementRef;
   @ViewChild('content') modelContent: ElementRef;
+  @ViewChild('data') modelDataContent: ElementRef;
+  @ViewChild('update') updateAddress: ElementRef
+  //@ViewChild('Save click') modal: ElementRef;
   @ViewChild('div') public popover: NgbPopover;
 
- // @Output() closeModalEvent = new EventEmitter<boolean>();
- @ViewChild('completeModal') completeModal: ElementRef;
+  // @Output() closeModalEvent = new EventEmitter<boolean>();
+  @ViewChild('completeModal') completeModal: ElementRef;
 
   @Input() chatButton: boolean = false;
   req: string;
@@ -31,14 +36,17 @@ export class ChatFormComponent implements OnInit {
   user: string = 'me';
   isDisabled: boolean = false;
 
-  check: boolean = false
+  check: boolean = true
+  count: number = 0;
 
   closeResult: string;
   model: any = {};
   loading = false;
   returnUrl: string;
-  errorMsg = ''
-
+  errorMsg = '';
+  userData: any;
+  updateUser: any = {};
+  responseData: any;
 
   //req: string;
 
@@ -49,14 +57,27 @@ export class ChatFormComponent implements OnInit {
     private modalService: NgbModal,
     private formBuilder: FormBuilder,
     private loginServiceService: LoginServiceService,
+    private updateService: UpdateService,
+    private route: ActivatedRoute,
+    public activeModal: NgbActiveModal
   ) {
     this.pushToChat({ message: "How may I help you...", type: "ROBO", date: new Date() })
   }
 
   loginForm = this.formBuilder.group({
-    username: [],
-    password: ['']
+    username: ['', Validators.required],
+    password: ['', Validators.required]
+  });
 
+  updateAddressData = this.formBuilder.group({
+    userId: ['', Validators.required],
+    name: ['', Validators.required],
+    addressLine1: ['', Validators.required],
+    addressLine2: ['', Validators.required],
+    city: ['', Validators.required],
+    state: ['', Validators.required],
+    zipcode: ['', Validators.required],
+    country: ['', Validators.required]
   });
   ngOnInit() {
     this.setFocus();
@@ -72,15 +93,21 @@ export class ChatFormComponent implements OnInit {
     console.log("User Input :" + this.req);
     this.isDisabled = true;
     this.pushToChat(this.generateChat(this.req, 'USER'));
-
     this.chatService
       .sendData(this.req)
       .subscribe(data => {
         console.info(data);
         if (data) {
-          if (data.message == "login") {
+          if (data.message == "login" && this.count == 0) {
             this.open(this.modelContent);
-            //this.loginComponent.open();
+          } else if (data.message == "update") {
+            if(this.count == 0){
+              alert("User Not LogedIn ! Please Login First" )
+            }else{
+              this.open(this.updateAddress)
+            }
+          }else if(this.count > 0) {
+            alert("User Alresdy LogedIn")
           }
           this.req = "";
           console.log("System output :");
@@ -108,7 +135,6 @@ export class ChatFormComponent implements OnInit {
   }
 
   open(content) {
-    this.check = true;
     console.log("----");
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -118,13 +144,6 @@ export class ChatFormComponent implements OnInit {
   }
 
   private getDismissReason(reason: any): string {
-    // if (reason === ModalDismissReasons.ESC) {
-    //   return 'by pressing ESC';
-    // } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-    //   return 'by clicking on a backdrop';
-    // } else {
-    //   return  `with: ${reason}`;
-    // }
     return null
   }
 
@@ -133,8 +152,15 @@ export class ChatFormComponent implements OnInit {
     this.loginServiceService.login(this.loginForm.value).subscribe(
       (response) => {
         console.log("success", response);
+        this.userData = response;
+        console.log("---", this.userData)
         // this.router.navigate(['/admindashboard']);
-        
+        this.loginForm.reset();
+        if (this.userData != null) {
+          this.open(this.modelDataContent);
+          this.count++
+          // alert(this.count > 0)
+        }
       },
       (error) => {
         this.errorMsg = error.statusText
@@ -142,9 +168,28 @@ export class ChatFormComponent implements OnInit {
     )
   }
 
-  onClick() {
-    this.check = false
-    this.popover.close();
+  updateUserAddress(update: UpdateModel): void {
+    // this.updateService.updateUser(update).subscribe(data => {
+    //   //this.restaurants = this.restaurants.filter(update => update !== restaurant);
+    //   alert("Restaurant Updated Successfully");
+    // });
+    console.log(this.updateAddressData.value)
+    this.updateService.updateUser(this.updateAddressData.value).subscribe(
+      (response) => {
+        console.log("successfully update", response);
+        this.responseData = response;
+
+        console.log("---", this.responseData)
+        // this.router.navigate(['/admindashboard']);
+        this.updateAddressData.reset();
+        // if (response != null) {
+        //   this.open(this.modelDataContent);
+        // }
+      },
+      (error) => {
+        this.errorMsg = error.statusText
+      }
+    )
   }
 }
 
