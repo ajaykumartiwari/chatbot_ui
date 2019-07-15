@@ -83,12 +83,12 @@ input{
     max-width: 400px;
     max-height: 20%
   }
-
+  
   .example-header-image {
     background-image: url('../../assets/erste.jpg');
     background-size: cover;
   }
-
+  
 mat-card {
     flex-grow: 1;
     border: 2px solid green;
@@ -113,6 +113,16 @@ mat-card {
   zoom: 1;
   margin-top: 10px;
 }
+
+
+button{
+    border-radius: 0%;
+    width: 80px;
+}
+.modal-btn{
+    padding-top: 50px;
+}
+
 button{
     border-radius: 0%;
     width: 80px;

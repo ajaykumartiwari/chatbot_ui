@@ -120,7 +120,6 @@ export class ChatFormComponent implements OnInit {
               this.updateAddressData.patchValue({ userId: this.logedInUserId })
               this.open(this.updateAddress)
             }
-          }
           } else if (this.count > 0) {
             alert("User Alresdy LogedIn")
           }
@@ -256,6 +255,7 @@ export class ChatFormComponent implements OnInit {
   }
 }
 
+
 interface Chats {
   message: string;
   type: string;
@@ -269,3 +269,4 @@ export interface Person {
   firstName: string;
   lastName: string;
 }
+
