@@ -12,7 +12,8 @@
         </div>
         <div #scrollMe class="panel-body" [scrollTop]="scrollMe.scrollHeight">
           <ul class="chat">
-            <li *ngFor="let chat of chats">
+            <div *ngFor="let chat of chats; let i = index; let last = last">
+            <li>
               <div *ngIf="chat.type==='USER'; else rightchat">
                 <div class="chat-body clearfix" style="text-align: right;">
                   <div class="header">
@@ -38,10 +39,18 @@
                           'medium' }}</span></small>
                     </div>
                     <p style="margin-left: 1px;">{{chat.message}}</p>
+                 
+                    <div *ngIf="chat.showButtonOption">
+                      <h5>Would you like to open {{optionProductName}} account?</h5>
+                      <button (click)="yesResponse()" class="btn btn-primary">yes</button>
+                      <button (clisk)="noResponse()"class="btn btn-danger">no</button>
+                    </div>
                   </div>
                 </div>
+
               </ng-template>
             </li>
+          </div>
           </ul>
         </div>
         <div class="panel-footer">
@@ -138,6 +147,22 @@
   </div>
 </ng-template>
 <!-- Data View Modal End -->
+
+<ng-template #sfonds let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="modal-basic-title">would you like to open sFonds Accont?</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div align="center" class="modal-btn">
+    <button (click)="yesResponse(); modal.dismiss('Cross click')" class="btn btn-primary">Yes</button> &nbsp;
+    <button (click)="modal.dismiss('Cross click')" class="btn btn-danger">No</button>
+    <p>
+
+    </p>
+  </div>
+</ng-template>
 
 <!-- Update Account and Address Details -->
 <ng-template #update let-modal>

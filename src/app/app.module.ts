@@ -15,12 +15,14 @@ import { LoginComponent } from './login/login.component';
 import {NgbModule, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { LoginServiceService } from './services/login-service.service';
 import { UpdateService } from './services/update.service';
+import { SpecialOptionsComponent } from './shared/special-options/special-options.component';
 @NgModule({
   declarations: [
     AppComponent,
     ChatFormComponent,
     ProductsComponent,
     LoginComponent,
+    SpecialOptionsComponent,
   ],
   imports: [
     BrowserModule,
