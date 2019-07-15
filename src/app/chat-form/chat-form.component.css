@@ -76,3 +76,10 @@ input[type=text] {
 input{
     text-indent: 10px;
   }
+button{
+    border-radius: 0%;
+    width: 80px;
+}
+.modal-btn{
+    padding-top: 50px;
+}

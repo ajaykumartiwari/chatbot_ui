@@ -23,6 +23,7 @@ export class ChatFormComponent implements OnInit {
   @ViewChild('update') updateAddress: ElementRef
   //@ViewChild('Save click') modal: ElementRef;
   @ViewChild('div') public popover: NgbPopover;
+  @ViewChild('sfonds') sfondsAccountOptons: ElementRef
 
   // @Output() closeModalEvent = new EventEmitter<boolean>();
   @ViewChild('completeModal') completeModal: ElementRef;
@@ -47,6 +48,9 @@ export class ChatFormComponent implements OnInit {
   userData: any;
   updateUser: any = {};
   responseData: any;
+  showOptions: boolean = false;
+  optionProductName: string;
+  lastIndex: number = 0;
 
   //req: string;
 
@@ -61,7 +65,7 @@ export class ChatFormComponent implements OnInit {
     private route: ActivatedRoute,
     public activeModal: NgbActiveModal
   ) {
-    this.pushToChat({ message: "How may I help you...", type: "ROBO", date: new Date() })
+    this.pushToChat({ message: "How may I help you...", type: "ROBO", date: new Date() , showButtonOption: false})
   }
 
   loginForm = this.formBuilder.group({
@@ -90,30 +94,53 @@ export class ChatFormComponent implements OnInit {
   }
 
   userRequest(): void {
+    this.showOptions = false;
     console.log("User Input :" + this.req);
     this.isDisabled = true;
-    this.pushToChat(this.generateChat(this.req, 'USER'));
+    this.pushToChat(this.generateChat(this.req, 'USER', false));
     this.chatService
       .sendData(this.req)
       .subscribe(data => {
         console.info(data);
         if (data) {
-          if (data.message == "login" && this.count == 0) {
+          if (data.message == "login modal" && this.count == 0) {
             this.open(this.modelContent);
-          } else if (data.message == "update") {
-            if(this.count == 0){
-              alert("User Not LogedIn ! Please Login First" )
-            }else{
+          } else if (data.message == "update modal") {
+            if (this.count == 0) {
+              alert("User Not LogedIn ! Please Login First")
+            } else {
               this.open(this.updateAddress)
             }
-          }else if(this.count > 0) {
+          } else if (this.count > 0) {
             alert("User Alresdy LogedIn")
+          }
+          if (this.req.includes("sfonds") && data.message != "hi") {
+            
+            this.showOptions = true;
+            this.optionProductName = "sFonds";
+            // this.open(this.sfondsAccountOptons)
+          }
+          if (this.req.includes("giro") && data.message != "") {
+            this.showOptions = true;
+            this.optionProductName = "Giro";
+            // this.open(this.sfondsAccountOptons)
+          }
+          if (this.req.includes("student") && data.message != "") {
+            this.showOptions = true;
+            this.optionProductName = "Student";
+            // this.open(this.sfondsAccountOptons)
           }
           this.req = "";
           console.log("System output :");
           console.log(data);
           console.info(this.chats);
-          this.pushToChat(this.generateChat(data.message, 'ROBO'));
+          if(this.showOptions == true){
+            this.pushToChat(this.generateChat(data.message, 'ROBO', true ));
+          }
+          else{
+            this.pushToChat(this.generateChat(data.message, 'ROBO', false));
+          }
+          
           this.isDisabled = false;
           this.setFocus();
         }
@@ -127,11 +154,14 @@ export class ChatFormComponent implements OnInit {
   }
 
   pushToChat(chat: Chats): void {
+    console.log(this.chats.length - 1)
+    this.lastIndex = this.chats.length - 1;
     this.chats.push(chat);
+
   }
 
-  generateChat(message: string, type: string): Chats {
-    return { message: message, type: type, date: new Date() }
+  generateChat(message: string, type: string, showButtonOption: boolean): Chats {
+    return { message: message, type: type, date: new Date() , showButtonOption : showButtonOption }
   }
 
   open(content) {
@@ -191,12 +221,23 @@ export class ChatFormComponent implements OnInit {
       }
     )
   }
+
+
+  yesResponse() {
+    //this.router.navigate(['https://www.sparkasse.at/erstebank-en/private-clients/accounts-cards'])
+    window.open('https://shop.sparkasse.at/store/home?institute=198&productCode=CAPITALPLAN&channel=03&conditionGroup=SFONDSPLAN&language=AT&entityID=A5DAA8BA-D717-40B5-88ED-AF05F2BADF6D&nfxsid=')
+  }
+  noResponse() {
+    this.showOptions = false;
+  }
 }
+
 
 interface Chats {
   message: string;
   type: string;
   date: Date;
+  showButtonOption: boolean;
 }
 
 
