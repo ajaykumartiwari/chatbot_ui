@@ -21,7 +21,7 @@ export class ChatFormComponent implements OnInit {
   @ViewChild('content') modelContent: ElementRef;
   @ViewChild('data') modelDataContent: ElementRef;
   @ViewChild('update') updateAddress: ElementRef
-  //@ViewChild('Save click') modal: ElementRef;
+  @ViewChild('addressData') displayUpdatedUserAddress: ElementRef
   @ViewChild('div') public popover: NgbPopover;
 
   // @Output() closeModalEvent = new EventEmitter<boolean>();
@@ -35,6 +35,7 @@ export class ChatFormComponent implements OnInit {
   robot: string = 'BOTMAN';
   user: string = 'me';
   isDisabled: boolean = false;
+  loginResponse: string = "";
 
   check: boolean = true
   count: number = 0;
@@ -47,7 +48,11 @@ export class ChatFormComponent implements OnInit {
   userData: any;
   updateUser: any = {};
   responseData: any;
-
+  public logedInUserId: string = '';
+  public id: string = '';
+  public name: string = '';
+  public balance: string = '';
+  public inputData: string = '';
   //req: string;
 
   constructor(
@@ -91,6 +96,7 @@ export class ChatFormComponent implements OnInit {
 
   userRequest(): void {
     console.log("User Input :" + this.req);
+    this.inputData = this.req;
     this.isDisabled = true;
     this.pushToChat(this.generateChat(this.req, 'USER'));
     this.chatService
@@ -98,22 +104,37 @@ export class ChatFormComponent implements OnInit {
       .subscribe(data => {
         console.info(data);
         if (data) {
-          if (data.message == "login" && this.count == 0) {
+          this.loginResponse = data.message;
+          if (this.loginResponse == "login modal" && this.count == 0) {
             this.open(this.modelContent);
-          } else if (data.message == "update") {
-            if(this.count == 0){
-              alert("User Not LogedIn ! Please Login First" )
-            }else{
+          } else if (this.loginResponse == "update modal") {
+            if (this.count == 0) {
+              alert("User Not LogedIn ! Please Login...")
+            } else {
+              this.updateAddressData.patchValue({ userId: this.logedInUserId })
               this.open(this.updateAddress)
             }
-          }else if(this.count > 0) {
-            alert("User Alresdy LogedIn")
-          }
+          } 
           this.req = "";
           console.log("System output :");
           console.log(data);
           console.info(this.chats);
-          this.pushToChat(this.generateChat(data.message, 'ROBO'));
+          if(this.count > 0 && data.message == 'login modal'){
+            if(this.inputData != 'login'){
+              this.open(this.modelDataContent);
+              this.pushToChat(this.generateChat("Account balance displayed...", 'ROBO'));
+            }else{
+            this.pushToChat(this.generateChat("User Already LogedIn...", 'ROBO'));
+            }
+          }else{
+            this.pushToChat(this.generateChat(data.message, 'ROBO'));
+          }
+
+          // if(data.message == "Invalid User"){
+          //   this.pushToChat(this.generateChat("Invalid User Please login again...", 'ROBO'));
+          // }
+
+
           this.isDisabled = false;
           this.setFocus();
         }
@@ -153,10 +174,14 @@ export class ChatFormComponent implements OnInit {
       (response) => {
         console.log("success", response);
         this.userData = response;
+        this.id = this.userData.result.id;
+        this.name = this.userData.result.name;
+        this.balance = this.userData.result.balance;
         console.log("---", this.userData)
         // this.router.navigate(['/admindashboard']);
         this.loginForm.reset();
         if (this.userData != null) {
+          this.logedInUserId = this.userData.result.userId;
           this.open(this.modelDataContent);
           this.count++
           // alert(this.count > 0)
@@ -169,22 +194,16 @@ export class ChatFormComponent implements OnInit {
   }
 
   updateUserAddress(update: UpdateModel): void {
-    // this.updateService.updateUser(update).subscribe(data => {
-    //   //this.restaurants = this.restaurants.filter(update => update !== restaurant);
-    //   alert("Restaurant Updated Successfully");
-    // });
     console.log(this.updateAddressData.value)
     this.updateService.updateUser(this.updateAddressData.value).subscribe(
       (response) => {
         console.log("successfully update", response);
         this.responseData = response;
-
-        console.log("---", this.responseData)
-        // this.router.navigate(['/admindashboard']);
+        console.log("---======>", this.responseData)
         this.updateAddressData.reset();
-        // if (response != null) {
-        //   this.open(this.modelDataContent);
-        // }
+        if(this.responseData != null){
+          this.open(this.displayUpdatedUserAddress);
+        }
       },
       (error) => {
         this.errorMsg = error.statusText

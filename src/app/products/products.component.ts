@@ -11,15 +11,19 @@ export class ProductsComponent implements OnInit {
 
   ngOnInit() {
   }
-  img: Chats[] = [{productName: "SCreditLine",image: "img1", description: "store credit line"},
-  {productName: "KOKO",image: "img1", description: "credit card"},
-  {productName: "Fonds Plan",image: "img1", description: "fonds plan"},
-  {productName: "About Erste",image: "img1", description: "about erste related"},
-  {productName: "General",image: "img1", description: "general banking query"}];
+  img: Chats[] = [
+    {productName: "SCreditLine",image: "img1", description: "store credit line"},
+    {productName: "KOKO",image: "img1", description: "credit card"},
+    {productName: "Depot",image: "img1", description: "sfonds plan"},
+    {productName: "Custome",image: "img1", description: "store customer"},
+    {productName: "Credit Card",image: "img1", description: "store credit card"},
+    {productName: "About Erste",image: "img1", description: "about erste"},
+    {productName: "General",image: "img1", description: "general banking"}];
+
   
 
-  doStuff(){
-    alert("Card 1")
+  doStuff(product){
+    alert(product)
   }
 }
 

@@ -10,7 +10,7 @@ export class LoginServiceService {
   constructor(private http: HttpClient) { }
   login(LoginModel) {
     return this.http.post<LoginModel>(
-      'http://127.0.0.1:5000/login',
+      'http://10.6.184.194:5000/login',
       LoginModel
     );
   }

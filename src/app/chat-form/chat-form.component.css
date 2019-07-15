@@ -76,3 +76,40 @@ input[type=text] {
 input{
     text-indent: 10px;
   }
+
+
+
+  .example-card {
+    max-width: 400px;
+    max-height: 20%
+  }
+  
+  .example-header-image {
+    background-image: url('../../assets/erste.jpg');
+    background-size: cover;
+  }
+  
+mat-card {
+    flex-grow: 1;
+    border: 2px solid green;
+    /* overflow: auto;     */
+}
+
+.outer {
+  white-space: nowrap;
+  position: relative;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.outer div {
+  /* width: 24.5%; */
+  background-color: #eee;
+  float: none;
+  /* height: 90%; */
+  margin: 0 0.55%;
+  display: inline-block;
+  zoom: 1;
+  margin-top: 10px;
+}

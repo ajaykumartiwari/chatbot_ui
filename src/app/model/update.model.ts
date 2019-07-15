@@ -1,5 +1,5 @@
 export class UpdateModel {
-    userId: number
+    userId: String
     name: String
     addressLine1: String
     addressLine2: String
@@ -9,7 +9,7 @@ export class UpdateModel {
     zipcode: number
 
 
-    constructor(userId, name, addressLine1,addressLine2,city,state,country,zipcode){
+    constructor(userId, name, addressLine1, addressLine2, city, state, country, zipcode){
         this.userId = userId;
         this.name = name;
         this.addressLine1 = addressLine1;

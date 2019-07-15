@@ -104,22 +104,33 @@
 <!-- Login Modal End -->
 
 <!-- Data View Modal Begin -->
-<ng-template #data let-modal >
+<ng-template #data let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">User Account Details</h4>
+    <h4 class="modal-title" id="modal-basic-title">Account Details</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body" *ngIf="userData!=null" style="background-color: rgb(212, 232, 248)">
-    <div>
-      <label>Account Number : {{userData.result.id}}</label>
-    </div>
-    <div>
-      <label>Account Holder Name : {{userData.result.name}}</label>
-    </div>
-    <div>
-      <label>Account Balance : {{userData.result.balance}}</label>
+    <div class="table">
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+      <tbody>
+        <tr>
+          <td>Account Number :</td>
+          <td>{{id}}</td>
+        </tr>
+        <tr>
+          <td>Account Holder Name :</td>
+          <td>{{name}}</td>
+        </tr>
+        <tr>
+          <td>Available Balance :</td>
+          <td>{{balance}}</td>
+        </tr>
+      </tbody>
     </div>
   </div>
   <div class="modal-footer">
@@ -139,12 +150,13 @@
   <div class="modal-body">
     <form #myUpdateForm="ngForm" [formGroup]="updateAddressData">
       <div class="form-group">
-        <label for="userId">Account Number</label>
+        <label for="userId">User Id</label>
         <div class="input-group">
-          <input type="number" class="form-control" formControlName="userId"  id="userId" required>
+          <input type="text" class="form-control" formControlName="userId"  id="userId" required>
         </div>
-        <p *ngIf="updateAddressData.controls.userId.errors?.required  && updateAddressData.controls.userId.touched">Account Number
-                Required</p>
+        <p *ngIf="updateAddressData.controls.userId.errors?.required  && updateAddressData.controls.userId.touched">
+          Account Number
+          Required</p>
       </div>
       <div class="form-group">
         <label for="name">Full Name</label>
@@ -152,7 +164,7 @@
           <input type="text" class="form-control" formControlName="name"  id="name" required>
         </div>
         <p *ngIf="updateAddressData.controls.name.errors?.required  && updateAddressData.controls.name.touched">Name
-            Required</p>
+          Required</p>
       </div>
       <div class="form-group">
         <label for="addressLine1">Address Line 1</label>
@@ -160,8 +172,10 @@
           <input type="text" class="form-control" formControlName="addressLine1"  id="addressLine1" required>
         </div>
         <p class="help-block">Street address, P.O. box, company name, c/o</p>
-        <p *ngIf="updateAddressData.controls.addressLine1.errors?.required  && updateAddressData.controls.addressLine1.touched">Address Line 1
-            Required</p>
+        <p
+          *ngIf="updateAddressData.controls.addressLine1.errors?.required  && updateAddressData.controls.addressLine1.touched">
+          Address Line 1
+          Required</p>
       </div>
       <div class="form-group">
         <label for="addressLine2">Address Line 2</label>
@@ -169,8 +183,10 @@
           <input type="text" class="form-control" formControlName="addressLine2"  id="addressLine2" required>
         </div>
         <p class="help-block">Apartment, suite , unit, building, floor, etc.</p>
-        <p *ngIf="updateAddressData.controls.addressLine2.errors?.required  && updateAddressData.controls.addressLine2.touched">Address Line 2
-            Required</p>
+        <p
+          *ngIf="updateAddressData.controls.addressLine2.errors?.required  && updateAddressData.controls.addressLine2.touched">
+          Address Line 2
+          Required</p>
       </div>
       <div class="form-group">
         <label for="city">City / Town</label>
@@ -178,7 +194,7 @@
           <input type="text" class="form-control" formControlName="city"  id="city" required>
         </div>
         <p *ngIf="updateAddressData.controls.city.errors?.required  && updateAddressData.controls.city.touched">City
-            Required</p>
+          Required</p>
       </div>
       <div class="form-group">
         <label for="state">State</label>
@@ -186,14 +202,15 @@
           <input type="text" class="form-control" formControlName="state"  id="state" required>
         </div>
         <p *ngIf="updateAddressData.controls.state.errors?.required  && updateAddressData.controls.state.touched">State
-            Required</p>
+          Required</p>
         <div class="form-group">
           <label for="zipcode">Country</label>
           <div class="input-group">
             <input type="text" class="form-control" formControlName="country"  id="country" required>
           </div>
-          <p *ngIf="updateAddressData.controls.country.errors?.required  && updateAddressData.controls.country.touched">Country
-              Required</p>
+          <p *ngIf="updateAddressData.controls.country.errors?.required  && updateAddressData.controls.country.touched">
+            Country
+            Required</p>
         </div>
       </div>
       <div class="form-group">
@@ -201,14 +218,91 @@
         <div class="input-group">
           <input type="number" class="form-control" formControlName="zipcode"  id="zipcode" required>
         </div>
-        <p *ngIf="updateAddressData.controls.zipcode.errors?.required  && updateAddressData.controls.zipcode.touched">Zipcode
-            Required</p>
+        <p *ngIf="updateAddressData.controls.zipcode.errors?.required  && updateAddressData.controls.zipcode.touched">
+          Zipcode
+          Required</p>
       </div>
       <!-- [disabled]="!updateAddressData.valid" -->
       <div class="modal-footer">
         <button type="submit" (click)="updateUserAddress(); modal.close('Save click')"  class="btn btn-success"
-        [disabled]="!updateAddressData.valid">Update</button>
+          [disabled]="!updateAddressData.valid">Update</button>
       </div>
     </form>
   </div>
 </ng-template>
+
+<!--Address Data View Modal Begin -->
+<ng-template #addressData let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Updated Customer Details</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="userData!=null" style="background-color: rgb(212, 232, 248)">
+    <div class="table">
+      <tr>
+        <th></th>
+        <th></th>
+      </tr>
+      <tbody>
+        <tr>
+          <td> User Id : </td>
+          <td>{{responseData.result.id}}</td>
+        </tr>
+        <tr>
+          <td>Customer Name :</td>
+          <td>{{responseData.result.name}}</td>
+        </tr>
+        <tr>
+          <td> Address 1 : </td>
+          <td>{{responseData.result.addressLine1}}</td>
+        </tr>
+        <tr>
+          <td>Address 2 :</td>
+          <td>{{responseData.result.addressLine2}}</td>
+        </tr>
+        <tr>
+          <td>City / Town :</td>
+          <td>{{responseData.result.city}}</td>
+        </tr>
+        <tr>
+          <td>State :</td>
+          <td>{{responseData.result.state}}</td>
+        </tr>
+        <tr>
+          <td>Country :</td>
+          <td>{{responseData.result.country}}</td>
+        </tr>
+        <tr>
+          <td>Zipcode :</td>
+          <td>{{responseData.result.zipcode}}</td>
+        </tr>
+      </tbody>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button (click)="modal.close('Save click')"  class="btn btn-danger">Close</button>
+  </div>
+</ng-template>
+<!-- Address Data View Modal End -->
+
+
+
+
+<!-- <div class="outer">
+    <div>
+      <mat-card class="example-card">
+        <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+          <mat-card-title>Login Confirmation</mat-card-title>
+          <mat-card-subtitle></mat-card-subtitle>
+        </mat-card-header>
+        
+        <mat-card-actions>
+        <button mat-button>Cancle</button>
+        <button mat-button>OK</button>
+      </mat-card-actions>
+      </mat-card>
+    </div>
+  </div> -->
