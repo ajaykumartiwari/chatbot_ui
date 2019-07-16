@@ -25,7 +25,6 @@ export class ChatFormComponent implements OnInit {
   @ViewChild('div') public popover: NgbPopover;
   @ViewChild('sfonds') sfondsAccountOptons: ElementRef
 
-  // @Output() closeModalEvent = new EventEmitter<boolean>();
   @ViewChild('completeModal') completeModal: ElementRef;
 
   @Input() chatButton: boolean = false;
@@ -120,24 +119,18 @@ export class ChatFormComponent implements OnInit {
               this.updateAddressData.patchValue({ userId: this.logedInUserId })
               this.open(this.updateAddress)
             }
-          } else if (this.count > 0) {
-            alert("User Alresdy LogedIn")
           }
           if (this.req.includes("sfonds") && data.message != "hi") {
-
             this.showOptions = true;
             this.optionProductName = "sFonds";
-            // this.open(this.sfondsAccountOptons)
           }
           if (this.req.includes("giro") && data.message != "") {
             this.showOptions = true;
             this.optionProductName = "Giro";
-            // this.open(this.sfondsAccountOptons)
           }
           if (this.req.includes("student") && data.message != "") {
             this.showOptions = true;
             this.optionProductName = "Student";
-            // this.open(this.sfondsAccountOptons)
           }
           this.req = "";
           console.log("System output :");
@@ -146,26 +139,18 @@ export class ChatFormComponent implements OnInit {
           if(this.showOptions == true){
             this.pushToChat(this.generateChat(data.message, 'ROBO', true ));
           }
-          else{
-            this.pushToChat(this.generateChat(data.message, 'ROBO', false));
-          }
 
           if(this.count > 0 && data.message == 'login modal'){
             if(this.inputData != 'login'){
               this.open(this.modelDataContent);
-              this.pushToChat(this.generateChat("Account balance displayed...", 'ROBO'));
+              this.pushToChat(this.generateChat("Account balance displayed...", 'ROBO', true));
             }else{
-            this.pushToChat(this.generateChat("User Already LogedIn...", 'ROBO'));
+            this.pushToChat(this.generateChat("User Already LogedIn...", 'ROBO', false));
             }
-          }else{
-            this.pushToChat(this.generateChat(data.message, 'ROBO'));
           }
-
-          // if(data.message == "Invalid User"){
-          //   this.pushToChat(this.generateChat("Invalid User Please login again...", 'ROBO'));
-          // }
-
-
+          else if(this.showOptions != true) {
+            this.pushToChat(this.generateChat(data.message, 'ROBO', false));
+          }
           this.isDisabled = false;
           this.setFocus();
         }
@@ -190,7 +175,6 @@ export class ChatFormComponent implements OnInit {
   }
 
   open(content) {
-    console.log("----");
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
@@ -211,14 +195,11 @@ export class ChatFormComponent implements OnInit {
         this.id = this.userData.result.id;
         this.name = this.userData.result.name;
         this.balance = this.userData.result.balance;
-        console.log("---", this.userData)
-        // this.router.navigate(['/admindashboard']);
         this.loginForm.reset();
         if (this.userData != null) {
           this.logedInUserId = this.userData.result.userId;
           this.open(this.modelDataContent);
           this.count++
-          // alert(this.count > 0)
         }
       },
       (error) => {
@@ -245,7 +226,6 @@ export class ChatFormComponent implements OnInit {
     )
   }
 
-
   yesResponse() {
     //this.router.navigate(['https://www.sparkasse.at/erstebank-en/private-clients/accounts-cards'])
     window.open('https://shop.sparkasse.at/store/home?institute=198&productCode=CAPITALPLAN&channel=03&conditionGroup=SFONDSPLAN&language=AT&entityID=A5DAA8BA-D717-40B5-88ED-AF05F2BADF6D&nfxsid=')
@@ -255,14 +235,12 @@ export class ChatFormComponent implements OnInit {
   }
 }
 
-
 interface Chats {
   message: string;
   type: string;
   date: Date;
   showButtonOption: boolean;
 }
-
 
 export interface Person {
   id: number;
