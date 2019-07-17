@@ -1,14 +1,9 @@
-<div class="container" style="background-color:rgb(255, 255, 255)">
+<div class="container" style="background-color:#f6e6d8">
   <div class="row">
     <div class="col-md-12">
       <div class="panel panel-primary">
         <div class="panel-heading">
           <span class="glyphicon glyphicon-comment"></span>
-          <!--<div class="btn-group pull-right">
-            <button type="button" class="btn btn-default btn-xs" (click)="logout()">
-              Logout
-            </button>
-          </div> -->
         </div>
         <div #scrollMe class="panel-body" [scrollTop]="scrollMe.scrollHeight">
           <ul class="chat">
@@ -16,38 +11,28 @@
               <li>
                 <div *ngIf="chat.type==='USER'; else rightchat">
                   <div class="chat-body clearfix" style="text-align: right;">
-                    <div class="header">
-                      <strong class="primary-font">{{ user }} :</strong>
-                      <small class="pull-right text-muted">&nbsp;&nbsp;&nbsp;
-                        <span class="glyphicon glyphicon-time" style="font-size: smaller">
-                        {{ chat.date | date:
-                        'medium'}}
-                      </span>
-                      </small>
-                    </div>
-                    <p style=" margin-right: 5px;">{{chat.message}}</p>
+                    <mat-card class="card1 user">
+                      <mat-card-content>
+                        {{ chat.date | date: 'medium'}}
+                        <p>{{chat.message}}</p>
+                      </mat-card-content>
+                    </mat-card>
                   </div>
                 </div>
                 <ng-template #rightchat>
-                  <div class="right clearfix" style="background-color:rgb(210, 223, 223)">
-                    <div class="chat-body clearfix" style="margin-left: 5px;">
-                      <div class="header">
-                        <small class="pull-right primary-font"><b>{{ robot }} :</b></small>
-                        <small class=" text-muted">&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-time"
-                                                                           style="font-size: smaller">{{
-                          chat.date | date:
-                          'medium' }}</span></small>
-                      </div>
-                      <p style="margin-left: 1px;">{{chat.message}}</p>
-
+                  <div style="margin: 5px;">
+                    <mat-card class="card2">
+                      <mat-card-content class="bot">
+                        {{chat.date | date: 'medium' }}
+                        <p style="margin-left: 1px;">{{chat.message}}</p>
+                      </mat-card-content>
                       <div *ngIf="chat.showButtonOption">
-                        <h5>Would you like to open {{optionProductName}} account?</h5>
+                        <h5 style="color: blue">Would you like to open {{optionProductName}} account?</h5>
                         <button (click)="yesResponse()" class="btn btn-primary">yes</button>
                         <button (clisk)="noResponse()" class="btn btn-danger">no</button>
                       </div>
-                    </div>
+                    </mat-card>
                   </div>
-
                 </ng-template>
               </li>
             </div>
@@ -60,17 +45,13 @@
               <input id="btn-input" #messageBox type="text" [(ngModel)]="req" name="userMessage"
                      class="form-control input-lg" placeholder="Write a reply..." required="" style="width: 100%;"
                      [disabled]="isDisabled"/>
-              <!-- <span class="input-group-btn" style="margin-left: 20px">
-                <button class="btn btn-warning btn-sm" id="btn-chat" [disabled]="!msgForm.form.valid">
-                  Send</button>
-              </span> -->
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  <app-products></app-products>
+  <!--<app-products></app-products>-->
 </div>
 <!-- <app-login></app-login> -->
 
@@ -85,36 +66,37 @@
   </div>
   <div class="modal-body">
     <form
-     #myForm="ngForm" [formGroup]="loginForm"  >
-    <div
-     class="form-group">
-    <label for="username">Username</label>
-    <div
-     class="input-group">
-    <input type="username" class="form-control" placeholder="Enter Username" formControlName="username"
-     id="usernameId" required>
-  </div>
-  <p *ngIf="loginForm.controls.username.errors?.required  && loginForm.controls.username.touched">Username
-    required</p>
-  </div>
-  <div
-   class="form-group">
-  <label for="password">Password</label>
-  <div
-   class="input-group">
-  <input type="password" class="form-control" placeholder="Enter Password" formControlName="password"
-   id="passwordId" required>
-  </div>
-  <p *ngIf="loginForm.controls.password.errors?.required  && loginForm.controls.password.touched">Password
-    required</p>
-  </div>
-  <div
-   class="modal-footer">
-  <button
-   type="submit" (click)="login(); modal.close('Save click')"  class="btn btn-success"
-  [disabled]="!loginForm.valid">Login</button>
-  </div>
-  </form>
+       #myForm="ngForm" [formGroup]="loginForm"  >
+      <div
+         class="form-group">
+        <label for="username">Username</label>
+        <div
+           class="input-group">
+          <input type="username" class="form-control" placeholder="Enter Username" formControlName="username"
+           id="usernameId" required>
+        </div>
+        <p *ngIf="loginForm.controls.username.errors?.required  && loginForm.controls.username.touched">Username
+          required</p>
+      </div>
+      <div
+         class="form-group">
+        <label for="password">Password</label>
+        <div
+           class="input-group">
+          <input type="password" class="form-control" placeholder="Enter Password" formControlName="password"
+           id="passwordId" required>
+        </div>
+        <p *ngIf="loginForm.controls.password.errors?.required  && loginForm.controls.password.touched">Password
+          required</p>
+      </div>
+      <div
+         class="modal-footer">
+        <button
+           type="submit" (click)="login(); modal.close('Save click')"  class="btn btn-success"
+          [disabled]="!loginForm.valid">Login
+        </button>
+      </div>
+    </form>
   </div>
 </ng-template>
 <!-- Login Modal End -->
@@ -150,8 +132,8 @@
     </div>
   </div>
   <div
-   class="modal-footer">
-  <button (click)="modal.close('Save click')"  class="btn btn-danger">Close</button>
+     class="modal-footer">
+    <button (click)="modal.close('Save click')"  class="btn btn-danger">Close</button>
   </div>
 </ng-template>
 <!-- Data View Modal End -->
@@ -182,104 +164,105 @@
   </div>
   <div class="modal-body">
     <form
-     #myUpdateForm="ngForm" [formGroup]="updateAddressData">
-    <div
-     class="form-group">
-    <label for="userId">User Id</label>
-    <div
-     class="input-group">
-    <input type="text" class="form-control" formControlName="userId"  id="userId" required>
-  </div>
-  <p *ngIf="updateAddressData.controls.userId.errors?.required  && updateAddressData.controls.userId.touched">
-    Account Number
-    Required</p>
-  </div>
-  <div
-   class="form-group">
-  <label for="name">Full Name</label>
-  <div
-   class="input-group">
-  <input type="text" class="form-control" formControlName="name"  id="name" required>
-  </div>
-  <p *ngIf="updateAddressData.controls.name.errors?.required  && updateAddressData.controls.name.touched">Name
-    Required</p>
-  </div>
-  <div
-   class="form-group">
-  <label for="addressLine1">Address Line 1</label>
-  <div
-   class="input-group">
-  <input type="text" class="form-control" formControlName="addressLine1"  id="addressLine1" required>
-  </div>
-  <p class="help-block">Street address, P.O. box, company name, c/o</p>
-  <p
-    *ngIf="updateAddressData.controls.addressLine1.errors?.required  && updateAddressData.controls.addressLine1.touched">
-    Address Line 1
-    Required</p>
-  </div>
-  <div
-   class="form-group">
-  <label for="addressLine2">Address Line 2</label>
-  <div
-   class="input-group">
-  <input type="text" class="form-control" formControlName="addressLine2"  id="addressLine2" required>
-  </div>
-  <p class="help-block">Apartment, suite , unit, building, floor, etc.</p>
-  <p
-    *ngIf="updateAddressData.controls.addressLine2.errors?.required  && updateAddressData.controls.addressLine2.touched">
-    Address Line 2
-    Required</p>
-  </div>
-  <div
-   class="form-group">
-  <label for="city">City / Town</label>
-  <div
-   class="input-group">
-  <input type="text" class="form-control" formControlName="city"  id="city" required>
-  </div>
-  <p *ngIf="updateAddressData.controls.city.errors?.required  && updateAddressData.controls.city.touched">City
-    Required</p>
-  </div>
-  <div
-   class="form-group">
-  <label for="state">State</label>
-  <div
-   class="input-group">
-  <input type="text" class="form-control" formControlName="state"  id="state" required>
-  </div>
-  <p *ngIf="updateAddressData.controls.state.errors?.required  && updateAddressData.controls.state.touched">State
-    Required</p>
-  <div
-   class="form-group">
-  <label for="zipcode">Country</label>
-  <div
-   class="input-group">
-  <input type="text" class="form-control" formControlName="country"  id="country" required>
-  </div>
-  <p *ngIf="updateAddressData.controls.country.errors?.required  && updateAddressData.controls.country.touched">
-    Country
-    Required</p>
-  </div>
-  </div>
-  <div
-   class="form-group">
-  <label for="zipcode">Zipcode</label>
-  <div
-   class="input-group">
-  <input type="number" class="form-control" formControlName="zipcode"  id="zipcode" required>
-  </div>
-  <p *ngIf="updateAddressData.controls.zipcode.errors?.required  && updateAddressData.controls.zipcode.touched">
-    Zipcode
-    Required</p>
-  </div>
-  <!-- [disabled]="!updateAddressData.valid" -->
-  <div
-   class="modal-footer">
-  <button
-   type="submit" (click)="updateUserAddress(); modal.close('Save click')"  class="btn btn-success"
-  [disabled]="!updateAddressData.valid">Update</button>
-  </div>
-  </form>
+       #myUpdateForm="ngForm" [formGroup]="updateAddressData">
+      <div
+         class="form-group">
+        <label for="userId">User Id</label>
+        <div
+           class="input-group">
+          <input type="text" class="form-control" formControlName="userId"  id="userId" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.userId.errors?.required  && updateAddressData.controls.userId.touched">
+          Account Number
+          Required</p>
+      </div>
+      <div
+         class="form-group">
+        <label for="name">Full Name</label>
+        <div
+           class="input-group">
+          <input type="text" class="form-control" formControlName="name"  id="name" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.name.errors?.required  && updateAddressData.controls.name.touched">Name
+          Required</p>
+      </div>
+      <div
+         class="form-group">
+        <label for="addressLine1">Address Line 1</label>
+        <div
+           class="input-group">
+          <input type="text" class="form-control" formControlName="addressLine1"  id="addressLine1" required>
+        </div>
+        <p class="help-block">Street address, P.O. box, company name, c/o</p>
+        <p
+          *ngIf="updateAddressData.controls.addressLine1.errors?.required  && updateAddressData.controls.addressLine1.touched">
+          Address Line 1
+          Required</p>
+      </div>
+      <div
+         class="form-group">
+        <label for="addressLine2">Address Line 2</label>
+        <div
+           class="input-group">
+          <input type="text" class="form-control" formControlName="addressLine2"  id="addressLine2" required>
+        </div>
+        <p class="help-block">Apartment, suite , unit, building, floor, etc.</p>
+        <p
+          *ngIf="updateAddressData.controls.addressLine2.errors?.required  && updateAddressData.controls.addressLine2.touched">
+          Address Line 2
+          Required</p>
+      </div>
+      <div
+         class="form-group">
+        <label for="city">City / Town</label>
+        <div
+           class="input-group">
+          <input type="text" class="form-control" formControlName="city"  id="city" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.city.errors?.required  && updateAddressData.controls.city.touched">City
+          Required</p>
+      </div>
+      <div
+         class="form-group">
+        <label for="state">State</label>
+        <div
+           class="input-group">
+          <input type="text" class="form-control" formControlName="state"  id="state" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.state.errors?.required  && updateAddressData.controls.state.touched">State
+          Required</p>
+        <div
+           class="form-group">
+          <label for="zipcode">Country</label>
+          <div
+             class="input-group">
+            <input type="text" class="form-control" formControlName="country"  id="country" required>
+          </div>
+          <p *ngIf="updateAddressData.controls.country.errors?.required  && updateAddressData.controls.country.touched">
+            Country
+            Required</p>
+        </div>
+      </div>
+      <div
+         class="form-group">
+        <label for="zipcode">Zipcode</label>
+        <div
+           class="input-group">
+          <input type="number" class="form-control" formControlName="zipcode"  id="zipcode" required>
+        </div>
+        <p *ngIf="updateAddressData.controls.zipcode.errors?.required  && updateAddressData.controls.zipcode.touched">
+          Zipcode
+          Required</p>
+      </div>
+      <!-- [disabled]="!updateAddressData.valid" -->
+      <div
+         class="modal-footer">
+        <button
+           type="submit" (click)="updateUserAddress(); modal.close('Save click')"  class="btn btn-success"
+          [disabled]="!updateAddressData.valid">Update
+        </button>
+      </div>
+    </form>
   </div>
 </ng-template>
 
@@ -334,8 +317,8 @@
     </div>
   </div>
   <div
-   class="modal-footer">
-  <button (click)="modal.close('Save click')"  class="btn btn-danger">Close</button>
+     class="modal-footer">
+    <button (click)="modal.close('Save click')"  class="btn btn-danger">Close</button>
   </div>
 </ng-template>
 <!-- Address Data View Modal End -->
