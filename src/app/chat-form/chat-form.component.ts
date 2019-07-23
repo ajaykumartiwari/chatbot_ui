@@ -20,10 +20,11 @@ export class ChatFormComponent implements OnInit {
   @ViewChild('messageBox') msgBox: ElementRef;
   @ViewChild('content') modelContent: ElementRef;
   @ViewChild('data') modelDataContent: ElementRef;
-  @ViewChild('update') updateAddress: ElementRef
-  @ViewChild('addressData') displayUpdatedUserAddress: ElementRef
+  @ViewChild('update') updateAddress: ElementRef;
+  @ViewChild('addressData') displayUpdatedUserAddress: ElementRef;
   @ViewChild('div') public popover: NgbPopover;
-  @ViewChild('sfonds') sfondsAccountOptons: ElementRef
+  @ViewChild('sfonds') sfondsAccountOptons: ElementRef;
+  @ViewChild('mobileNumber') mobileNumberContent: ElementRef
 
   @ViewChild('completeModal') completeModal: ElementRef;
 
@@ -53,10 +54,16 @@ export class ChatFormComponent implements OnInit {
   public name: string = '';
   public balance: string = '';
   public inputData: string = '';
+  public mobileNumber: number = 0;
+  public otp: number = 0;
   showOptions: boolean = false;
   optionProductName: string;
   lastIndex: number = 0;
-
+  getNumberFlag: boolean = false;
+  isNumberSubmitted: boolean = false;
+  mobileNumberMessage = "Glad to assist you. Please enter your registered 10 digit mobile number";
+  isNeedOtp: boolean = false;
+  mobilePattern = /[0-9\+\-\ ]/;
   //req: string;
 
   constructor(
@@ -77,6 +84,10 @@ export class ChatFormComponent implements OnInit {
     username: ['', Validators.required],
     password: ['', Validators.required]
   });
+  mobileOtpForm = this.formBuilder.group({
+    mobileNumber: ['', Validators.required],
+    // otp: ['', Validators.required]
+  })
 
   updateAddressData = this.formBuilder.group({
     userId: ['', Validators.required],
@@ -99,11 +110,13 @@ export class ChatFormComponent implements OnInit {
   }
 
   userRequest(): void {
+    console.log("outside of subscribe isNeedOtp-->",this.isNeedOtp);
     this.showOptions = false;
     console.log("User Input :" + this.req);
     this.inputData = this.req;
     this.isDisabled = true;
     this.pushToChat(this.generateChat(this.req, 'USER', false));
+
     this.chatService
       .sendData(this.req)
       .subscribe(data => {
@@ -111,7 +124,8 @@ export class ChatFormComponent implements OnInit {
         if (data) {
           this.loginResponse = data.message;
           if (this.loginResponse == "login modal" && this.count == 0) {
-            this.open(this.modelContent);
+            // this.open(this.mobileNumberContent);
+            this.getNumberFlag = true;
           } else if (this.loginResponse == "update modal") {
             if (this.count == 0) {
               alert("User Not LogedIn ! Please Login...")
@@ -137,6 +151,7 @@ export class ChatFormComponent implements OnInit {
           console.log(data);
           console.info(this.chats);
           if(this.showOptions == true){
+
             this.pushToChat(this.generateChat(data.message, 'ROBO', true ));
           }
 
@@ -148,6 +163,39 @@ export class ChatFormComponent implements OnInit {
             this.pushToChat(this.generateChat("User Already LogedIn...", 'ROBO', false));
             }
           }
+          else if (data.message == 'login modal') {
+            data.message = "";
+            console.log("chatbotEnums.mobile-->",this.mobileNumberMessage)
+            data.message = this.mobileNumberMessage;
+            this.isNeedOtp = true;
+            this.pushToChat(this.generateChat(data.message, 'ROBO', false ));
+          }else if(data.message == 'valid number'){
+            console.log("mobile number accepted");
+            // this.submitNumber(this.req);
+            console.log("mobileNumber-- ",this.mobileNumber+ "  otp-- ",this.otp)
+            data.message = "Please enter the OTP sent to your mobile number " 
+            this.pushToChat(this.generateChat(data.message, 'ROBO', false ));
+            this.isNeedOtp = false;
+          }else if(data.message == 'valid otp'){
+            console.log("otp accepted");
+            // this.submitNumber(this.req);
+            // console.log("mobileNumber-- ",this.mobileNumber+ "  otp-- ",this.otp)
+            data.message = "valid OTP " 
+            this.open(this.modelDataContent);
+            // this.pushToChat(this.generateChat("Account balance displayed...", 'ROBO', true));
+            this.pushToChat(this.generateChat(data.message, 'ROBO', false ));
+            this.isNeedOtp = false;
+          } else if (data.message == "account details") {
+            this.userData = data;
+            console.log("acc details-->",this.userData.result)
+
+            this.id = this.userData.result.id;
+            this.name = this.userData.result.name;
+            this.balance = this.userData.result.balance;
+            console.log("acc details-->"+this.id+ "  "+this.name+ "  "+this.balance)
+            this.pushToChat(this.generateChat("User Id: "+ this.id+ " User Name: "+this.name+ " Balance: "+this.balance, 'ROBO', false));
+          }
+          
           else if(this.showOptions != true) {
             this.pushToChat(this.generateChat(data.message, 'ROBO', false));
           }
@@ -155,6 +203,7 @@ export class ChatFormComponent implements OnInit {
           this.setFocus();
         }
       })
+    
   }
 
   setFocus(): void {
@@ -208,6 +257,28 @@ export class ChatFormComponent implements OnInit {
     )
   }
 
+  submitNumber(mobileRequest) {
+    console.log("mobileRequest->",mobileRequest)
+    // service call
+    // console.log(this.mobileOtpForm.value)
+    this.chatService.getOtp(mobileRequest).subscribe(
+      (response)=> {
+        console.log("otp call success", response);
+        this.userData = response;
+        this.mobileNumber = this.userData.result.mobileNumber;
+        this.otp = this.userData.result.otpNumber;
+        console.log("mobileNumber-- ",this.mobileNumber+ "  otp-- ",this.otp)
+        response.message = "Please enter the OTP sent to your mobile number " + this.mobileNumber
+        this.pushToChat(this.generateChat(response.message, 'ROBO', false ));
+        this.isDisabled = false;
+        this.setFocus();
+        this.isNeedOtp = false;
+        
+      }
+    )
+    // this.isNumberSubmitted = true;
+  }
+
   updateUserAddress(update: UpdateModel): void {
     console.log(this.updateAddressData.value)
     this.updateService.updateUser(this.updateAddressData.value).subscribe(
@@ -233,6 +304,7 @@ export class ChatFormComponent implements OnInit {
   noResponse() {
     this.showOptions = false;
   }
+ 
 }
 
 interface Chats {

@@ -101,6 +101,54 @@
 </ng-template>
 <!-- Login Modal End -->
 
+<ng-template #mobileNumber let-modal *ngIf="count == 0">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Glad to assist you. Please enter your registered 10 digit mobile number.</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form
+       #myForm="ngForm" [formGroup]="mobileOtpForm" *ngIf="!isNumberSubmitted" >
+      <div class="form-group">
+        <label for="username">Mobile number</label>
+        <div
+           class="input-group">
+          <input type="username" class="form-control" placeholder="Enter Registere Mobile Number" formControlName="username"
+           id="usernameId" required>
+        </div>
+       
+      </div>
+      <div
+         class="modal-footer">
+        <button
+           type="submit" (click)="submitNumber()"  class="btn btn-success"
+         >Submit
+        </button>
+      </div>
+    
+    </form>
+    <form #myForm="ngForm" [formGroup]="OtpForm" >
+      <div *ngIf="isNumberSubmitted">
+        <label for="otp">OTP</label>
+        <div
+           class="input-group">
+          <input type="otp" class="form-control" placeholder="Enter OTP" formControlName="otp"
+           id="usernameId" required>
+        </div>
+        
+      </div>
+      <div class="modal-footer" *ngIf="isNumberSubmitted">
+        <button
+           type="submit" (click)="submitNumber(); modal.close('Save click')"  class="btn btn-success"
+         >Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
 <!-- Data View Modal Begin -->
 <ng-template #data let-modal>
   <div class="modal-header">
