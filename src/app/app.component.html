@@ -1,19 +1,20 @@
 <!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
+<!--<div style="text-align:center">
   <h2 style="color:white">
     Welcome, I am BOTMAN  </h2>
-</div>
+</div>-->
 <!-- <div>
   <button *ngIf="enableEdit" (click)="enableEdit=false" routerLink="/req">Chating app</button>
 </div><br> -->
 
-<div class="example-button-row" style="text-align:center">
-  <button mat-fab color="primary" *ngIf="isDisabled" (click)="enableEdit()" routerLink="/req">Chat</button>
-</div>
-
-<div>
+<div *ngIf="isDisabled">
   <router-outlet></router-outlet>
 </div>
+
+<div class="example-button-row" class="position">
+  <button mat-fab color="primary" (click)="enableEdit()" routerLink="/req">{{start}}</button>
+</div>
+
 
 
 

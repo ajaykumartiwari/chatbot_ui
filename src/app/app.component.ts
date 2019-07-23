@@ -8,9 +8,22 @@ import { EventEmitter } from 'protractor';
 })
 export class AppComponent {
   title = 'fe';
+
   isDisabled: boolean = true;
-  
+  start: string = "Chat";
+  count: number = 0;
+
   enableEdit(){
-    this.isDisabled = false;
+    this.count++;
+    this.start = "Close"
+    if(this.count == 2){
+      this.isDisabled = false;
+      this.count = 0
+      this.start = "Chat"
+     }
+     if( this.count == 1){
+     this.start = "Close"
+     this.isDisabled = true;
+    }
   }
 }

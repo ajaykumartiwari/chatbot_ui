@@ -147,4 +147,14 @@ button{
 li{
   list-style-type: none;
 }
-
+.position {
+  float: right;
+  margin-right: 5%;
+  margin-top: 12%;
+  background-color:#f6e6d8;
+  width: 25%;
+}
+h3{
+  text-align: center;
+  text-color: blue;
+}

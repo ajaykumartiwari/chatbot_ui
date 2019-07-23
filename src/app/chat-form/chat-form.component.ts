@@ -57,6 +57,8 @@ export class ChatFormComponent implements OnInit {
   optionProductName: string;
   lastIndex: number = 0;
 
+  productList: string = '';
+
   //req: string;
 
   constructor(
@@ -230,8 +232,11 @@ export class ChatFormComponent implements OnInit {
     //this.router.navigate(['https://www.sparkasse.at/erstebank-en/private-clients/accounts-cards'])
     window.open('https://shop.sparkasse.at/store/home?institute=198&productCode=CAPITALPLAN&channel=03&conditionGroup=SFONDSPLAN&language=AT&entityID=A5DAA8BA-D717-40B5-88ED-AF05F2BADF6D&nfxsid=')
   }
+
   noResponse() {
-    this.showOptions = false;
+    //this.productList = "<b>Some HTML you want to display</b>";
+    //this.pushToChat(this.generateChat(this.productList, 'ROBO', false));
+      this.showOptions = false;
   }
 }
 
