@@ -21,7 +21,7 @@ export class UpdateService {
     const id = 100;
     
      return this.http.put<UpdateModel>(
-       "http://10.6.184.194:5000/update", UpdateModel
+       "http://127.0.0.1:5000/update", UpdateModel
      );
    }
  
